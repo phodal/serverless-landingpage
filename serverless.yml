@@ -9,10 +9,21 @@ provider:
   memorySize: 128
   timeout: 5
   region: us-east-1
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:DescribeTable
+        - dynamodb:Query
+        - dynamodb:Scan
+        - dynamodb:GetItem
+        - dynamodb:PutItem
+      Resource: "arn:aws:dynamodb:us-east-1:*:*"
 
 functions:
-  hello:
-    handler: handler.hello
+  create:
+    handler: handler.create
+    events:
+      - http: POST email
 
 custom:
   customDomain:
@@ -25,6 +36,22 @@ custom:
 
 resources:
   Resources:
+    EmailDynamoDbTable:
+      Type: 'AWS::DynamoDB::Table'
+      DeletionPolicy: Retain
+      Properties:
+        AttributeDefinitions:
+          -
+            AttributeName: id
+            AttributeType: S
+        KeySchema:
+          -
+            AttributeName: id
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+        TableName: 'email'
     ## Specifying the S3 Bucket
     WebAppS3Bucket:
       Type: AWS::S3::Bucket
