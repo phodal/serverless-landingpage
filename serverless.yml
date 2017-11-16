@@ -1,8 +1,7 @@
 service: landingpage
 
 plugins:
-  - serverless-domain-manager
-  - serverless-single-page-app-plugin
+  - serverless-finch
 
 provider:
   name: aws
