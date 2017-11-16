@@ -9,8 +9,10 @@ provider:
   runtime: nodejs6.10
   memorySize: 128
   timeout: 5
-  stage: test
+  stage: dev
   region: us-east-1
+  environment:
+    DYNAMODB_TABLE: ${self:service}-${opt:stage, self:provider.stage}
   iamRoleStatements:
     - Effect: Allow
       Action:
@@ -19,13 +21,16 @@ provider:
         - dynamodb:Scan
         - dynamodb:GetItem
         - dynamodb:PutItem
-      Resource: "arn:aws:dynamodb:us-east-1:*:*"
+      Resource: "arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/${self:provider.environment.DYNAMODB_TABLE}"
 
 functions:
   create:
     handler: handler.create
     events:
-      - http: POST email
+      - http:
+          path: todos
+          method: post
+          cors: true
 
 custom:
   customDomain:
@@ -53,4 +58,5 @@ resources:
         ProvisionedThroughput:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
-        TableName: 'email'
+        TableName: ${self:provider.environment.DYNAMODB_TABLE}
+

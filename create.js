@@ -12,7 +12,7 @@ module.exports = (event, callback) => {
   email.updatedAt = new Date().getTime();
 
   const params = {
-    TableName: 'email',
+    TableName: process.env.DYNAMODB_TABLE,
     Item: email
   };
 
