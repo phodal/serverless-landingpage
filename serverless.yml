@@ -28,9 +28,14 @@ functions:
     handler: handler.create
     events:
       - http:
-          path: todos
+          path: /todos
           method: post
-          cors: true
+  home:
+    handler: handler
+    events:
+      - http:
+          path: /
+          method: get
 
 custom:
   customDomain:
