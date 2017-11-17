@@ -1,7 +1,6 @@
 {
   "devDependencies": {
     "serverless-domain-manager": "^1.1.20",
-    "serverless-finch": "^1.2.2",
     "uuid": "^3.1.0"
   }
 }

@@ -1,7 +1,6 @@
 service: landingpage
 
 plugins:
-  - serverless-finch
   - serverless-domain-manager
 
 provider:
