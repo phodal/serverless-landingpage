@@ -1,8 +1,4 @@
-'use strict';
-
-const create = require('./create.js');
-
-const base_page = `<html lang="zh-cmn-Hans">
+<html lang="zh-cmn-Hans">
   <head>
     <title>Growth Studio Landing Page Test</title>
     <meta http-equiv="content-language" content="zh-CN"/>
@@ -223,27 +219,4 @@ const base_page = `<html lang="zh-cmn-Hans">
     <script src="https://cdn.bootcss.com/popper.js/1.12.9/umd/popper.min.js"></script>
     <script src="https://cdn.bootcss.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js"></script>
   </body>
-</html>`
-
-module.exports.create = (event, context, callback) => {
-  create(event, (error, result) => {
-    const response = {
-      statusCode: 200,
-      body: JSON.stringify(result),
-    };
-
-    context.succeed(response);
-  });
-};
-
-
-module.exports.home = (event, context, callback) => {
-  callback(
-    null,
-    {
-      statusCode: 200,
-      body: base_page,
-      headers: {'Content-Type': 'text/html'},
-    }
-  );
-};
+</html>
