@@ -40,10 +40,10 @@ const base_page = `<html lang="zh-cmn-Hans">
             <h1 class="mb-5">Build a landing page for your business or project and generate more leads!</h1>
           </div>
           <div class="col-md-10 col-lg-8 col-xl-7 mx-auto">
-            <form>
+            <form action="/save" id="submitForm1">
               <div class="form-row">
                 <div class="col-12 col-md-9 mb-2 mb-md-0">
-                  <input type="email" class="form-control form-control-lg" placeholder="Enter your email...">
+                  <input type="email" class="form-control form-control-lg" placeholder="Enter your email..." required="required" >
                 </div>
                 <div class="col-12 col-md-3">
                   <button type="submit" class="btn btn-block btn-lg btn-primary">Sign up!</button>
@@ -157,10 +157,10 @@ const base_page = `<html lang="zh-cmn-Hans">
             <h2 class="mb-4">Ready to get started? Sign up now!</h2>
           </div>
           <div class="col-md-10 col-lg-8 col-xl-7 mx-auto">
-            <form>
+            <form action="/save" id="submitForm2">
               <div class="form-row">
                 <div class="col-12 col-md-9 mb-2 mb-md-0">
-                  <input type="email" class="form-control form-control-lg" placeholder="Enter your email...">
+                  <input type="email" class="form-control form-control-lg" placeholder="Enter your email..." required="required" >
                 </div>
                 <div class="col-12 col-md-3">
                   <button type="submit" class="btn btn-block btn-lg btn-primary">Sign up!</button>
@@ -222,10 +222,47 @@ const base_page = `<html lang="zh-cmn-Hans">
     <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://cdn.bootcss.com/popper.js/1.12.9/umd/popper.min.js"></script>
     <script src="https://cdn.bootcss.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js"></script>
+    <script>
+    $( document ).ready(function() {
+      function handleSubmit(that, event) {
+        event.preventDefault();
+        var $form = $(that),
+          email = $form.find("input[type='email']" ).val(),
+          url = $form.attr( "action" );
+
+        $.ajax({
+          type: 'POST',
+          url: '/save',
+          data: JSON.stringify({ address: email }), // or JSON.stringify ({name: 'jonas'}),
+          success: function(data) {
+            $("button[type='submit']").text('已提交');
+            $("button[type='submit']").prop('disabled', true);
+            $("input[type='email']").prop('disabled', true);
+          },
+          contentType: "application/json",
+          dataType: 'json'
+        });
+      }
+      $("#submitForm1").submit(function( event ) {
+        handleSubmit(this, event);
+      });
+      $("#submitForm2").submit(function( event ) {
+        handleSubmit(this, event);
+      });
+    });
+    </script>
   </body>
 </html>`
 
 module.exports.create = (event, context, callback) => {
+  if(!event.body) {
+    callback(null, { statusCode: 400, body: 'error: empty object'});
+  }
+  try {
+    const email = JSON.parse(event.body);
+  } catch(e) {
+    callback(null, { statusCode: 400, body: 'error: error object'});
+  }
   create(event, (error, result) => {
     const response = {
       statusCode: 200,

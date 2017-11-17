@@ -4,6 +4,7 @@
     "uuid": "^3.1.0"
   },
   "dependencies": {
+    "lodash.isobject": "^3.0.2",
     "serverless-finch": "^1.2.2"
   }
 }
